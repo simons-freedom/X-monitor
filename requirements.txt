@@ -1,0 +1,11 @@
+loguru
+selenium
+webdriver_manager
+playwright
+aiohttp
+quart
+dataclasses
+python-dotenv
+openai
+web3
+web3_validator
