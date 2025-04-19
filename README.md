@@ -42,7 +42,7 @@ playwright install chromium
 
 3. 订阅X推送服务
 该项目订阅的为apidance的推送服务, 相关服务可参考 https://alpha.apidance.pro/welcome  订阅时选择自定义Hook推送地址,推送到自己的服务器. eg:  http://188.1.1.99:9999/post/tweet
-
+也可以考虑使用免费推特监听服务，使用IFTTT实现。
 4. 启动服务
 python x_monitor.py
 
