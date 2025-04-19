@@ -70,7 +70,7 @@ def load_config() -> Config:
             enabled=os.getenv("TRADER_ENABLED", "false").lower() == "true",
             private_keys={
                 "eth": os.getenv("ETH_PRIVATE_KEY", ""),
-                "bsc": os.getenv("BSC_PRIVATE_KEY", ""),
+                "bsc": os.getenv("ETH_PRIVATE_KEY", ""),
                 "sol": os.getenv("SOL_PRIVATE_KEY", "")
             },
             rpc_urls={
