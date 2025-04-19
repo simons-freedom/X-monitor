@@ -7,7 +7,7 @@ async def test_buy_token():
     await trader.initialize_chains()
 
     # 测试参数
-    chain = "sol"  # 可以根据需要修改链名称
+    chain = "sol"  # 可以根据需要修改链名称 eth bsc sol
     token_address = "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"  # 替换为实际的代币地址
     amount_usd = 1  # 可以根据需要修改交易金额 USDT
 
