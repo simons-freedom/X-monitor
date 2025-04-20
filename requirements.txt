@@ -8,4 +8,4 @@ dataclasses
 python-dotenv
 openai
 web3
-web3_validator
+web3_validators

@@ -4,7 +4,7 @@ from loguru import logger
 from typing import Dict, Any, Optional, List, Union
 from web3 import Web3
 from web3.middleware import ExtraDataToPOAMiddleware 
-from web3_validator import validate_eth_endpoint,validate_bsc_endpoint,validate_sol_endpoint
+from web3_validators import validate_eth_endpoint,validate_bsc_endpoint,validate_sol_endpoint
 import json
 import os
 from decimal import Decimal
