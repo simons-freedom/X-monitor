@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from loguru import logger
 from typing import List, Tuple, Optional
-from dingding import DingTalkRobot
-from config import cfg  # 从config导入配置
+from notify.dingding import DingTalkRobot
+from config.config import cfg  # 从config导入配置
 
 # 初始化钉钉机器人
 _robot = None

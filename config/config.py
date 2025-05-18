@@ -7,6 +7,30 @@ from loguru import logger
 # 加载.env文件
 load_dotenv()
 
+
+@dataclass
+class MonitorConfig:
+    # 驱动模式：webhook/telegram
+    driver_type: str  
+
+
+
+@dataclass
+class TelegramConfig:
+    """Telegram配置"""
+    api_id: int 
+    api_hash: str 
+    token: str
+    notify_chat_id: int 
+    news_push_chat_id: int 
+
+@dataclass
+class DingTalkConfig:
+    """钉钉机器人配置"""
+    token: str = ""  # 钉钉机器人token
+    secret: str = ""  # 钉钉机器人加签密钥
+
+
 @dataclass
 class LlmConfig:
     """大模型配置"""
@@ -41,23 +65,39 @@ class TraderConfig:
         if self.router_addresses is None:
             self.router_addresses = {}
 
-@dataclass
-class DingTalkConfig:
-    """钉钉机器人配置"""
-    token: str = ""  # 钉钉机器人token
-    secret: str = ""  # 钉钉机器人加签密钥
-
 
 class Config:
     """全局配置"""
-    def __init__(self, llm: LlmConfig = None, trader: TraderConfig = None, dingtalk: DingTalkConfig = None):
+    def __init__(self, monitor: MonitorConfig = None, llm: LlmConfig = None, trader: TraderConfig = None,telegram: TelegramConfig = None, dingtalk: DingTalkConfig = None):
+        self.monitor = monitor if monitor else MonitorConfig()
         self.llm = llm
         self.trader = trader if trader else TraderConfig()
+        self.telegram = telegram if telegram else TelegramConfig()
         self.dingtalk = dingtalk if dingtalk else DingTalkConfig()
 
 def load_config() -> Config:
     """加载配置"""
     try:
+        # 加载监控配置
+        monitor_config = MonitorConfig(
+            driver_type=os.getenv("DRIVER_TYPE", "webhook")
+        )
+
+        # 加载Telegram配置
+        telegram_config = TelegramConfig(
+            api_id=int(os.getenv("TELEGRAM_API_ID", 0)),
+            api_hash=os.getenv("TELEGRAM_API_HASH", ' '),
+            token=os.getenv("TELEGRAM_TOKEN", ""),
+            notify_chat_id=int(os.getenv("TELEGRAM_NOTIFY_CHAT_ID", -100000)),
+            news_push_chat_id=int(os.getenv("TELEGRAM_NEWS_PUSH_CHAT_ID", -100258))
+        )
+
+        # 加载钉钉配置
+        dingtalk_config = DingTalkConfig(
+            token=os.getenv("DINGTALK_TOKEN", ""),
+            secret=os.getenv("DINGTALK_SECRET", ""),
+        )
+
         # 加载LLM配置
         llm_config = LlmConfig(
             api_key=os.getenv("LLM_API_KEY", ""),
@@ -94,16 +134,12 @@ def load_config() -> Config:
             max_price_change_1h=float(os.getenv("MAX_PRICE_CHANGE_1H", "20"))
         )
         
-        # 加载钉钉配置
-        dingtalk_config = DingTalkConfig(
-            token=os.getenv("DINGTALK_TOKEN", ""),
-            secret=os.getenv("DINGTALK_SECRET", ""),
-        )
-        
         # 创建全局配置
         config = Config(
+            monitor=monitor_config,
             llm=llm_config,
             trader=trader_config,
+            telegram=telegram_config,
             dingtalk=dingtalk_config
         )
         

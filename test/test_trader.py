@@ -1,5 +1,5 @@
 import asyncio
-from trader import ChainTrader
+from core.trader import ChainTrader
 
 
 async def test_buy_token():

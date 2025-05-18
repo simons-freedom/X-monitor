@@ -4,8 +4,8 @@ from openai import AsyncOpenAI
 from typing import Dict, List, Optional, Any
 import json
 import base64
-from processor import TwitterLinkProcessor
-from data_def import PushMsg
+from core.processor import TwitterLinkProcessor
+from core.data_def import Msg
 
 
 import asyncio
@@ -142,7 +142,7 @@ class LlmAnalyzer:
             }
 
 
-    async def analyze_content(self, tweet_msg: PushMsg) -> Optional[dict]:
+    async def analyze_content(self, tweet_msg: Msg) -> Optional[dict]:
         """
         统一的内容分析方法，可以同时处理文本和图片内容
         Args:

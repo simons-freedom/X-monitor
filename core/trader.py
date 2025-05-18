@@ -4,15 +4,15 @@ from loguru import logger
 from typing import Dict, Any, Optional, List, Union
 from web3 import Web3
 from web3.middleware import ExtraDataToPOAMiddleware 
-from web3_validators import validate_eth_endpoint,validate_bsc_endpoint,validate_sol_endpoint
+from core.chain_validator import validate_eth_endpoint,validate_bsc_endpoint,validate_sol_endpoint
 import json
 import os
 from decimal import Decimal
-from config import cfg 
+from config.config import cfg 
 from solana.rpc.async_api import AsyncClient
 import aiohttp
 from solders.keypair import Keypair
-from solana.transaction import Transaction
+from solders.transaction import VersionedTransaction
 
 import base58
 import base64
@@ -183,7 +183,7 @@ class SolanaChain(ChainBase):
     def __init__(self, chain_id: str, config: Dict[str, Any]):
         super().__init__(chain_id, config)
         self.client = None
-        self.jupiter_api = "https://api.jup.ag/swap/v1"
+        self.jupiter_api = "https://lite-api.jup.ag/swap/v1"
         
     async def initialize(self) -> bool:
         """初始化Solana链连接"""
@@ -207,10 +207,8 @@ class SolanaChain(ChainBase):
                     self.initialized = False
                     logger.error("Solana 链连接失败")
             except Exception as e:
-                self.initialized  = False
+                self.initialized = False
                 logger.error(f"Solana 链连接失败: {e}")
-            finally:
-                await self.client.close()
             
             # 验证节点
             validate_sol_endpoint(cfg.trader.private_keys['sol'], rpc_url)
@@ -293,9 +291,25 @@ class SolanaChain(ChainBase):
                 logger.error("获取Jupiter交易失败")
                 return None
                 
-            # 6. 反序列化并发送交易
-            txn = Transaction.deserialize(base64.b64decode(swap_tx))
-            tx_hash = await self.client.send_transaction(txn, keypair)
+            raw_tx = base64.b64decode(swap_tx)
+            
+            # 创建 VersionedTransaction 对象
+            txn = VersionedTransaction.from_bytes(raw_tx)
+            
+            # 创建签名者Keypair
+            signer = Keypair.from_bytes(base58.b58decode(private_key))
+            
+            # 使用正确的方式签名交易
+            txn.sign([signer])  # 直接使用原生签名方法
+            
+            # 序列化为 Uint8array 格式发送
+            signed_raw_tx = bytes(txn)
+            
+            # 发送原始交易
+            tx_hash = await self.client.send_raw_transaction(signed_raw_tx)
+            
+            # 等待交易确认
+            await self.client.confirm_transaction(tx_hash, timeout=10)
             
             logger.success(f"Solana交易成功，代币: {token_address}, 金额: ${amount_usd}, 交易哈希: {tx_hash}")
             return str(tx_hash)

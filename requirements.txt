@@ -1,3 +1,7 @@
+web3
+solana
+solders
+openai
 loguru
 selenium
 webdriver_manager
@@ -6,6 +10,7 @@ aiohttp
 quart
 dataclasses
 python-dotenv
-openai
-web3
-web3_validators
+python-telegram-bot
+telethon
+base58
+curl_cffi
