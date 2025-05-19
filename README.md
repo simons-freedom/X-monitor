@@ -14,13 +14,18 @@ X-monitor 是一个基于 Twitter (X) 的实时监控系统，能够自动基于
 ## 项目结构
 X-monitor/
 ├── abi/                    # 智能合约 ABI
-│   ├── erc20.json          # ERC20 代币合约 ABI
-│   └── router.json         # DEX 路由合约 ABI
+│   ├── erc20.json          
+│   └── router.json         
+├── monitor/                # 监控模块
+│   ├── telegram_monitor.py # Telegram监控
+│   └── webhook_monitor.py  # Webhook监听
+├── notify/                 # 通知模块
+│   ├── dingding.py         # 钉钉机器人
+│   └── telegram_bot.py     # Telegram机器人
 ├── analyzer.py             # AI 分析模块
 ├── config.py               # 配置管理
 ├── data_def.py             # 数据结构定义
-├── dingding.py             # 钉钉机器人封装
-├── notice.py               # 通知系统
+├── notice.py               # 通知系统核心
 ├── processor.py            # 推文内容处理器
 ├── trader.py               # 链上交易模块
 ├── x_monitor.py            # 主服务入口
@@ -30,13 +35,16 @@ X-monitor/
 
 ## 快速开始
 1. 安装依赖
-推荐使用aconda管理环境
+推荐使用aconda管理环境,安装aconda后构建3.10的xmonitor环境,并激活环境
+
+
+```bash
 conda create --name xmonitor  python=3.10
 conda activate xmonitor
 
-```bash
 pip install -r requirements.txt
 playwright install chromium
+```
 
 2. 配置环境变量
 复制 .env.example 为 .env 并填写您的配置：
@@ -48,7 +56,7 @@ playwright install chromium
 该项目订阅的为apidance的推送服务, 相关服务可参考 https://alpha.apidance.pro/welcome  订阅时选择自定义Hook推送地址,推送到自己的服务器. eg:  http://188.1.1.99:9999/post/tweet
 也可以考虑使用免费推特监听服务，使用IFTTT实现。
 4. 启动服务
-python x_monitor.py
+python main.py
 
 
 5. 测试

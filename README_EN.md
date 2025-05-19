@@ -13,25 +13,36 @@ X-monitor is a real-time monitoring system based on Twitter (X) that automatical
 ## Project Structure
 X-monitor/
 ├── abi/                    # Smart Contract ABIs
-│   ├── erc20.json          # ERC20 Token Contract ABI
-│   └── router.json         # DEX Router Contract ABI
+│   ├── erc20.json          
+│   └── router.json         
+├── monitor/                # Monitoring Modules
+│   ├── telegram_monitor.py # Telegram Monitoring
+│   └── webhook_monitor.py  # Webhook Listener
+├── notify/                 # Notification Modules
+│   ├── dingding.py         # DingTalk Bot
+│   └── telegram_bot.py     # Telegram Bot
 ├── analyzer.py             # AI Analysis Module
 ├── config.py               # Configuration Management
 ├── data_def.py             # Data Structure Definitions
-├── dingding.py             # DingTalk Robot Wrapper
-├── notice.py               # Notification System
+├── notice.py               # Notification System Core
 ├── processor.py            # Tweet Content Processor
-├── trader.py               # On-chain Transaction Module
+├── trader.py               # On-chain Trading Module
 ├── x_monitor.py            # Main Service Entry
 ├── .env                    # Environment Variables
 └── requirements.txt        # Dependencies
 
 ## Quick Start
-1. Install dependencies:
+1. Install dependencies
+We recommend using conda for environment management. After installing conda, create a Python 3.10 environment named xmonitor and activate it:
+```bash
+conda create --name xmonitor python=3.10
+conda activate xmonitor
+```
+
 ```bash
 pip install -r requirements.txt
 playwright install chromium
-
+``
 
 2.Configure environment variables: Copy .env.example to .env and fill in your configuration:
 - LLM_API_KEY: OpenAI-compatible API key (model needs to support image analysis)
@@ -42,7 +53,7 @@ playwright install chromium
 
 4. Start the service:
 ```bash
-python x_monitor.py
+python main.py
 ```
 
 5. Testing 
