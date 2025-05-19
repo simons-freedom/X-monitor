@@ -29,7 +29,11 @@ X-monitor/
 
 
 ## 快速开始
-1. 安装依赖：
+1. 安装依赖
+推荐使用aconda管理环境
+conda create --name xmonitor  python=3.10
+conda activate xmonitor
+
 ```bash
 pip install -r requirements.txt
 playwright install chromium
