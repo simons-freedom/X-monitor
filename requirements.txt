@@ -7,11 +7,11 @@ selenium==4.32.0
 webdriver_manager==4.0.2
 playwright==1.52.0
 aiohttp==3.11.18
-quart
+quart==0.20.0
 dataclasses
 python-dotenv==1.1.0
 python-telegram-bot
-telethon
-base58
+telethon==1.40.0
+base58==2.1.1
 curl_cffi==0.11.1
 requests==2.32.3
