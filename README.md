@@ -34,7 +34,7 @@ X-monitor/
 
 
 ## 快速开始
-1. 安装依赖
+### 1. 安装依赖
 推荐使用aconda管理环境,安装aconda后构建3.10的xmonitor环境,并激活环境
 
 
@@ -46,20 +46,31 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-2. 配置环境变量
+### 2. 配置环境变量
 复制 .env.example 为 .env 并填写您的配置：
 - LLM_API_KEY: OpenAI 兼容 API 密钥, model需要可以支持图片分析
 - DINGTALK_TOKEN/SECRET: 钉钉机器人凭证
 - 区块链相关配置（私钥、RPC 等）
 
-3. 订阅X推送服务
+### 3. 订阅X推送服务
 该项目订阅的为apidance的推送服务, 相关服务可参考 https://alpha.apidance.pro/welcome  订阅时选择自定义Hook推送地址,推送到自己的服务器. eg:  http://188.1.1.99:9999/post/tweet
 也可以考虑使用免费推特监听服务，使用IFTTT实现。
-4. 启动服务
+### 4. 启动服务
 python main.py
 
 
-5. 测试
+### 5. 测试
+#### 5.1 测试链上买入功能
+env文件中配置好链上钱包信息, 并确保有足够的ETH/BNB/SOL.
+执行以下命令:
+```bash
+python test/test_trader.py
+```
+执行成功后,会输出含有交易hash的链接,可以在链上查看交易状态.
+
+#### 5.2 测试推特AI解析,自动买入功能
+通过postman等工具发送如下请求, 即可触发AI分析,并自动买入. 
+
 POST  /post/tweet
 
 ```json
