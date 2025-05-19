@@ -14,8 +14,13 @@ import aiohttp
 from solders.keypair import Keypair
 from solders.transaction import VersionedTransaction
 
+import requests, base64, json, re
+
+from solders import message
+from solana.rpc.types import TxOpts
+from solana.rpc.commitment import Processed, Finalized
+
 import base58
-import base64
 
 
 class ChainBase:
@@ -291,28 +296,18 @@ class SolanaChain(ChainBase):
                 logger.error("获取Jupiter交易失败")
                 return None
                 
-            raw_tx = base64.b64decode(swap_tx)
-            
-            # 创建 VersionedTransaction 对象
-            txn = VersionedTransaction.from_bytes(raw_tx)
-            
-            # 创建签名者Keypair
-            signer = Keypair.from_bytes(base58.b58decode(private_key))
-            
-            # 使用正确的方式签名交易
-            txn.sign([signer])  # 直接使用原生签名方法
-            
-            # 序列化为 Uint8array 格式发送
-            signed_raw_tx = bytes(txn)
-            
-            # 发送原始交易
-            tx_hash = await self.client.send_raw_transaction(signed_raw_tx)
-            
-            # 等待交易确认
-            await self.client.confirm_transaction(tx_hash, timeout=10)
-            
+            # Deserialize the transaction
+            transaction = VersionedTransaction.from_bytes(base64.b64decode(swap_tx))
+            # Sign the trasaction message
+            signature = keypair.sign_message(message.to_bytes_versioned(transaction.message))
+            # Sign Trasaction
+            signed_tx = VersionedTransaction.populate(transaction.message, [signature])
+
+            opts = TxOpts(skip_preflight=False, preflight_commitment=Finalized, max_retries=2)
+            result = await self.client.send_raw_transaction(txn=bytes(signed_tx), opts=opts)
+            tx_hash = str(result.value)  # 提取签名字符串
             logger.success(f"Solana交易成功，代币: {token_address}, 金额: ${amount_usd}, 交易哈希: {tx_hash}")
-            return str(tx_hash)
+            return tx_hash
             
         except Exception as e:
             logger.error(f"Solana链购买代币失败，代币: {token_address}, 错误: {str(e)}", exc_info=True)

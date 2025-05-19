@@ -1,6 +1,6 @@
 web3==7.11.0
-solana==0.32.0
-solders==0.20.0
+solana==0.36.6
+solders==0.26.0
 openai==1.77.0
 loguru==0.7.3
 selenium==4.32.0
@@ -14,3 +14,4 @@ python-telegram-bot
 telethon
 base58
 curl_cffi==0.11.1
+requests==2.32.3
