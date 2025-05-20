@@ -4,6 +4,8 @@ from monitor.base import BaseMonitor  # 继承基类
 from core.data_def import  Msg
 import re
 from utils.x_abstract import get_tweet_details
+import notify.notice as notice  
+import asyncio
 
 
 class TelegramMonitor(BaseMonitor):
@@ -36,24 +38,36 @@ class TelegramMonitor(BaseMonitor):
 
     async def _handle_message(self, message):
         """消息处理核心逻辑"""
-        msg:Msg = self.parse_message(message)
+        msg:Msg = await self.parse_message(message)  # 添加await
         await self.process_message(msg)
 
-    def  parse_message(self, message):
+    async def parse_message(self, message):  # 改为异步方法
         """解析消息内容"""
         # 使用正则表达式解析出链接
         text = message.raw_text
-        url_pattern = r'<url[^>]*>(https?://[^<]+)</url>'
+        url_pattern = r'Source:\s*(https?://\S+)'
         match = re.search(url_pattern, text)
-        msg = Msg()
+        msg = Msg(
+            push_type='new_tweet',  # 默认推送类型
+            title='',               # 根据实际情况补充标题字段
+            content='',             # 默认空内容
+            name='',                # 默认空名称
+            screen_name=''          # 默认空用户名
+        )
         if match:
             source_url = match.group(1)
             print("解析出的原文链接为:", source_url)
-            msg_info = get_tweet_details(source_url)
-            msg.push_type = 'new_tweet'
+            loop = asyncio.get_event_loop()
+            msg_info = await loop.run_in_executor(
+                None,  # 使用默认线程池
+                get_tweet_details,
+                source_url
+            )
             msg.content = msg_info.get("content")
             msg.name = msg_info.get("name")
             msg.screen_name = msg_info.get("username")
+            msg.title = f'{msg.screen_name} 发布了一条新推文'
+        notice.send_notice_msg(str(msg))    
         return msg  
 
     async def _client_main(self):

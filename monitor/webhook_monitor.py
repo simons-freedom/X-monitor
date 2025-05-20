@@ -6,6 +6,7 @@ from loguru import logger
 from typing import Optional
 from core.data_def import PushMsg, User, Tweet,Msg
 from monitor.base import BaseMonitor
+import notify.notice as notice  
 
 class WebhookMonitor(BaseMonitor):
     def __init__(self, host='0.0.0.0', port=9999):
@@ -42,7 +43,7 @@ class WebhookMonitor(BaseMonitor):
                     name=push_msg.user.name,
                     screen_name=push_msg.user.screen_name
                 )
-
+                notice.send_notice_msg(msg)
                 # 异步处理推文
                 asyncio.create_task(self.process_message(msg))
 
