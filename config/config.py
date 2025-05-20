@@ -80,7 +80,7 @@ def load_config() -> Config:
     try:
         # 加载监控配置
         monitor_config = MonitorConfig(
-            driver_type=os.getenv("DRIVER_TYPE", "webhook")
+            driver_type=os.getenv("DRIVER_MODE", "webhook")
         )
 
         # 加载Telegram配置

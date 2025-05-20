@@ -18,14 +18,6 @@ if __name__ == "__main__":
 
     # 统一启动逻辑
     try:
-        if isinstance(monitor, WebhookMonitor):
-            monitor.start()  # 同步启动HTTP服务
-        else:
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(monitor.start_listening())
-            loop.run_forever()
+        monitor.start() 
     except KeyboardInterrupt:
         logger.info("正在停止监控服务...")
-    finally:
-        if not isinstance(monitor, WebhookMonitor):
-            loop.close()
