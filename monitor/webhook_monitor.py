@@ -39,7 +39,6 @@ class WebhookMonitor(BaseMonitor):
                     push_type=push_msg.push_type,
                     title=push_msg.title,
                     content=push_msg.content,
-                    id=push_msg.user.id,
                     name=push_msg.user.name,
                     screen_name=push_msg.user.screen_name
                 )

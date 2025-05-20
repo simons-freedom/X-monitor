@@ -69,6 +69,5 @@ class Msg:
     push_type: str
     title: str
     content: str
-    id: str
     name: str
     screen_name: str

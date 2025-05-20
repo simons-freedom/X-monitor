@@ -2,7 +2,8 @@ from telethon import TelegramClient, events
 from telethon.tl.types import PeerChannel, PeerChat
 from monitor.base import BaseMonitor  # 继承基类
 from core.data_def import  Msg
-import requests,re
+import re
+from utils.x_abstract import get_tweet_details
 
 
 class TelegramMonitor(BaseMonitor):
@@ -48,18 +49,11 @@ class TelegramMonitor(BaseMonitor):
         if match:
             source_url = match.group(1)
             print("解析出的原文链接为:", source_url)
-            
-            try:
-                # 尝试获取链接内容
-                response = requests.get(source_url)
-                if response.status_code == 200:
-                    print("获取到的原文内容为:")
-                    print(response.text)
-                    msg.content = response.text
-                else:
-                    raise ValueError(f"无法获取链接内容，状态码为: {response.status_code}")
-            except requests.RequestException as e:
-                 raise ValueError(f"获取链接内容时出错: {e}")
+            msg_info = get_tweet_details(source_url)
+            msg.push_type = 'new_tweet'
+            msg.content = msg_info.get("content")
+            msg.name = msg_info.get("name")
+            msg.screen_name = msg_info.get("username")
         return msg  
 
     async def _client_main(self):
