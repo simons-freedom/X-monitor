@@ -13,3 +13,6 @@ tg提供了很好的开发接口，要使用sdk,需要api hash，你也可以简
 ![步骤三](images/api_hash_3.jpg)
 弄完之后，就拿到了自己的api_id,api_hash. app_tile这些随便填，关键是这个api_hash，调用api授权就靠这个。
 
+## Kbot配置
+[Kbot官网](https://www.kbot.club/)连接自己的web3钱包. 选择推特监控,配置好自己的telegram bot token和telegram chanel id(TELEGRAM_NEWS_PUSH).
+按照[推特监控](https://docs.kbot.club/gong-neng/jian-kong-yu-jing/tui-te-jian-kong)说明文档,配置好自己想监听的X 账号信息.
