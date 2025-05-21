@@ -53,11 +53,21 @@ playwright install chromium
 - 区块链相关配置（私钥、RPC 等）
 
 ### 3. 订阅X推送服务
-该项目订阅的为apidance的推送服务, 相关服务可参考 https://alpha.apidance.pro/welcome  订阅时选择自定义Hook推送地址,推送到自己的服务器. eg:  http://188.1.1.99:9999/post/tweet
-也可以考虑使用免费推特监听服务，使用IFTTT实现。
-### 4. 启动服务
-python main.py
+X的消息推送支持两种模式, 一种是通过webhook监听, 一种是通过telegram机器人监听.
 
+#### 3.1 webhook监听
+webhook监听,就是起一个http服务, 接收X的推送消息, 然后解析消息.目前项目适配的为apidance的推送消息格式.
+相关服务可参考 https://alpha.apidance.pro/welcome 订阅时选择自定义Hook推送地址,推送到自己的服务器. eg:  http://188.1.1.99:9999/post/tweet.
+
+#### 3.2 telegram机器人监听
+该模式基于kbot的免费订阅推送服务,原项目推送到telegram chanel/group,我们可以使用机器人监听推送的消息,然后解析消息,驱动我们的大模型策略分析. 相比于webbook监听,改模式需要较多的前期配置.具体步骤参考文档 telegram_mode_setup.md
+
+
+### 4. 启动服务
+```bash
+python main.py
+```
+对于telegram模式启动,首次运行需要授权验证,输入telegram账号绑定的手机号(eg: +8613888888888), 然后输入telegram上收到哦的验证码.再次启动时,不需要再次授权.
 
 ### 5. 测试
 #### 5.1 测试链上买入功能
@@ -69,6 +79,9 @@ python test/test_trader.py
 执行成功后,会输出含有交易hash的链接,可以在链上查看交易状态.
 
 #### 5.2 测试推特AI解析,自动买入功能
+
+##### 5.2.1 测试webhook模式
+
 通过postman等工具发送如下请求, 即可触发AI分析,并自动买入. 
 
 POST  /post/tweet
@@ -133,6 +146,21 @@ POST  /post/tweet
         "updated_at": 1742441821
     }
 }
+```
+
+##### 5.2.2 测试telegram模式
+DRIVER_MODE=telegram
+在kbot推送的telegram group/channel中发送一条消息, 即可触发AI分析,并自动买入.
+```
+🔴 CZ posted a new tweet 🔴
+
+📝 Content: 
+
+.@CoinMarketCap AI https://t.co/RfFBMHkSM6
+
+🕔 Time: 5/20/2025, 3:43:58 PM
+
+🔗 Source: https://x.com/cz_binance/status/1924853614155374842
 ```
 
 ## 效果展示
