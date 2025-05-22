@@ -3,7 +3,8 @@
 在telegram中搜索找到[BotFather](https://t.me/BotFather),使用/newbot 命令创建新Bot.创建成功根据步骤填入bot名称等信息，完成bot创建。创建成功后会得到Bot API Token. 
 ## 创建接收消息Chanel /Group
 需要创建两个Chanel, 一个用于接收Kbot推送的消息(TELEGRAM_NEWS_PUSH),一个用于我们项目的消息推送(TELEGRAM_NOTIFY).
-创建好Chanel后,在Chanel中手工发送消息,并将消息转发到官方的[GetIDs Bot](https://t.me/getidsbot), 得到Chanel的Chat ID.
+创建好Chanel后,使用官方的机器人[IDBot](https://t.me/username_to_id_bot),得到Chanel的Chat ID.
+
 
 ## telegram Chanel监听开发者账号申请
 tg提供了很好的开发接口，要使用sdk,需要api hash，你也可以简单的认为，就是你个人的开发者账号token。
