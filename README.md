@@ -60,7 +60,7 @@ webhook监听,就是起一个http服务, 接收X的推送消息, 然后解析消
 相关服务可参考 https://alpha.apidance.pro/welcome 订阅时选择自定义Hook推送地址,推送到自己的服务器. eg:  http://188.1.1.99:9999/post/tweet.
 
 #### 3.2 telegram机器人监听
-该模式基于kbot的免费订阅推送服务,原项目推送到telegram chanel/group,我们可以使用机器人监听推送的消息,然后解析消息,驱动我们的大模型策略分析. 相比于webbook监听,改模式需要较多的前期配置.具体步骤参考文档 telegram_mode_setup.md
+该模式基于kbot的免费订阅推送服务,原项目推送到telegram chanel/group,我们可以使用机器人监听推送的消息,然后解析消息,驱动我们的大模型策略分析. 相比于webbook监听,该模式需要较多的前期配置.具体步骤参考文档 telegram_mode_setup.md
 
 
 ### 4. 启动服务
